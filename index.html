@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro Simples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .summary div {
+            background: #f2f2f2;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            width: 30%;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .data-table tbody tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        .paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .not-paid {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Controle Financeiro Simples</h1>
+    </header>
+
+    <div class="container">
+        <h1>Registrar Transação</h1>
+        <form id="transaction-form">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" placeholder="Ex: Mensalidade, Aluguel..." required>
+
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" step="0.01" placeholder="Ex: 150.00" required>
+
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <div class="summary">
+            <div>
+                <h2>Total Receitas</h2>
+                <p id="total-receitas">R$ 0.00</p>
+            </div>
+            <div>
+                <h2>Total Despesas</h2>
+                <p id="total-despesas">R$ 0.00</p>
+            </div>
+            <div>
+                <h2>Saldo Atual</h2>
+                <p id="saldo-atual">R$ 0.00</p>
+            </div>
+        </div>
+
+        <h1>Histórico de Transações</h1>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor (R$)</th>
+                </tr>
+            </thead>
+            <tbody id="transaction-table">
+                <!-- Transações adicionadas aqui -->
+            </tbody>
+        </table>
+
+        <h1>Alunas</h1>
+        <form id="student-form">
+            <label for="nome-aluna">Nome da Aluna:</label>
+            <input type="text" id="nome-aluna" name="nome-aluna" placeholder="Ex: Maria Silva" required>
+
+            <label for="valor-mensalidade">Valor da Mensalidade (R$):</label>
+            <input type="number" id="valor-mensalidade" name="valor-mensalidade" step="0.01" placeholder="Ex: 200.00" required>
+
+            <button type="submit">Adicionar Aluna</button>
+        </form>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Mensalidade (R$)</th>
+                    <th>Status de Pagamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="student-table">
+                <!-- Alunas adicionadas aqui -->
+            </tbody>
+        </table>
+
+        <h1>Custos Fixos</h1>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Valor (R$)</th>
+                    <th>Status de Pagamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="fixed-costs-table">
+                <tr>
+                    <td>Aluguel</td>
+                    <td>R$ 500.00</td>
+                    <td class="not-paid">Não Pago</td>
+                    <td><button class="pay-button">Marcar como Pago</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const form = document.getElementById('transaction-form');
+        const transactionTable = document.getElementById('transaction-table');
+        const totalReceitas = document.getElementById('total-receitas');
+        const totalDespesas = document.getElementById('total-despesas');
+        const saldoAtual = document.getElementById('saldo-atual');
+
+        const studentForm = document.getElementById('student-form');
+        const studentTable = document.getElementById('student-table');
+
+        const fixedCostsTable = document.getElementById('fixed-costs-table');
+
+        let receitas = 0;
+        let despesas = 0;
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const descricao = document.getElementById('descricao').value;
+            const tipo = document.getElementById('tipo').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${descricao}</td>
+                <td>${tipo}</td>
+                <td>R$ ${valor.toFixed(2)}</td>
+            `;
+            transactionTable.appendChild(row);
+
+            if (tipo === 'receita') {
+                receitas += valor;
+            } else {
+                despesas += valor;
+            }
+
+            atualizarResumo();
+
+            form.reset();
+        });
+
+        function atualizarResumo() {
+            totalReceitas.textContent = `R$ ${receitas.toFixed(2)}`;
+            totalDespesas.textContent = `R$ ${despesas.toFixed(2)}`;
+            saldoAtual.textContent = `R$ ${(receitas - despesas).toFixed(2)}`;
+        }
+
+        studentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nomeAluna = document.getElementById('nome-aluna').value;
+            const valorMensalidade = parseFloat(document.getElementById('valor-mensalidade').value);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${nomeAluna}</td>
+                <td>R$ ${valorMensalidade.toFixed(2)}</td>
+                <td class="not-paid">Não Pago</td>
+                <td><button class="pay-button">Marcar como Pago</button></td>
+            `;
+            studentTable.appendChild(row);
+
+            row.querySelector('.pay-button').addEventListener('click', function() {
+                const statusCell = row.querySelector('td:nth-child(3)');
+                if (statusCell.textContent === 'Não Pago') {
+                    statusCell.textContent = 'Pago';
+                    statusCell.classList.remove('not-paid');
+                    statusCell.classList.add('paid');
+
+                    receitas += valorMensalidade;
+                    atualizarResumo();
+                }
+            });
+
+            studentForm.reset();
+        });
+
+        // Lidar com os custos fixos
+        fixedCostsTable.querySelector('.pay-button').addEventListener('click', function() {
+            const statusCell = fixedCostsTable.querySelector('td:nth-child(3)');
+            const valorAluguel = 500.00;
+
+            if (statusCell.textContent === 'Não Pago') {
+                statusCell.textContent = 'Pago';
+                statusCell.classList.remove('not-paid');
+                statusCell.classList.add('paid');
+
+                despesas += valorAluguel;
+                atualizarResumo();
+            }
+        });
+    </script>
+</body>
+</html>
