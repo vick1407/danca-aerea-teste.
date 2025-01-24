@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Registrar Transação</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Registrar Transação</h1>
+        <form id="transaction-form">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" placeholder="Ex: Mensalidade, Aluguel..." required>
+    
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+    
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" step="0.01" placeholder="Ex: 150.00" required>
+    
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <nav>
+            <a href="custos-fixos.html">Custos Fixos</a> |
+            <a href="alunas.html">Alunas</a> |
+            <a href="index.html">Resumo</a>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('transaction-form');
+            const transactionTable = document.getElementById('transaction-table');
+            const totalReceitas = document.getElementById('total-receitas');
+            const totalDespesas = document.getElementById('total-despesas');
+            const saldoAtual = document.getElementById('saldo-atual');
+            let receitas = parseFloat(localStorage.getItem('receitas')) || 0;
+            let despesas = parseFloat(localStorage.getItem('despesas')) || 0;
+
+            // Atualizar o resumo financeiro
+            function atualizarResumo() {
+                totalReceitas.textContent = `R$ ${receitas.toFixed(2)}`;
+                totalDespesas.textContent = `R$ ${despesas.toFixed(2)}`;
+                saldoAtual.textContent = `R$ ${(receitas - despesas).toFixed(2)}`;
+            }
+
+            // Função para adicionar uma transação
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const descricao = document.getElementById('descricao').value.trim();
+                const tipo = document.getElementById('tipo').value;
+                const valor = parseFloat(document.getElementById('valor').value);
+
+                if (!descricao || isNaN(valor) || valor <= 0) {
+                    alert('Por favor, preencha todos os campos corretamente.');
+                    return;
+                }
+
+                const transacao = {
+                    descricao,
+                    tipo,
+                    valor
+                };
+
+                // Atualiza o histórico de transações
+                const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+                transacoes.push(transacao);
+                localStorage.setItem('transacoes', JSON.stringify(transacoes));
+
+                // Atualiza o valor das receitas ou despesas
+                if (tipo === 'receita') {
+                    receitas += valor;
+                } else {
+                    despesas += valor;
+                }
+
+                // Atualiza o localStorage
+                localStorage.setItem('receitas', receitas.toFixed(2));
+                localStorage.setItem('despesas', despesas.toFixed(2));
+
+                // Atualiza o resumo e o histórico
+                atualizarResumo();
+                atualizarHistorico();
+
+                form.reset();
+            });
+
+            // Atualiza o histórico de transações
+            function atualizarHistorico() {
+                const transactionTable = document.getElementById('transaction-table');
+                transactionTable.innerHTML = ''; // Limpa o histórico atual
+
+                const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
+                transacoes.forEach(transacao => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${transacao.descricao}</td>
+                        <td>${transacao.tipo}</td>
+                        <td>R$ ${transacao.valor.toFixed(2)}</td>
+                    `;
+                    transactionTable.appendChild(row);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

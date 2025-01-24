@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Alunas</title>
+</head>
+<body>
+    <header>
+        <h1>Controle Financeiro Simples</h1>
+    </header>
+
+    <div class="container">
+        <h1>Registrar Alunas</h1>
+        <form id="student-form">
+            <label for="nome-aluna">Nome da Aluna:</label>
+            <input type="text" id="nome-aluna" name="nome-aluna" placeholder="Ex: Maria Silva" required>
+
+            <label for="valor-mensalidade">Valor da Mensalidade (R$):</label>
+            <input type="number" id="valor-mensalidade" name="valor-mensalidade" step="0.01" placeholder="Ex: 200.00" required>
+
+            <label for="turma">Turma:</label>
+            <select id="turma" name="turma" required>
+                <option value="Turma 1">Turma 1</option>
+                <option value="Turma 2">Turma 2</option>
+                <option value="Turma 3">Turma 3</option>
+            </select>
+
+            <label for="dias-semana">Dias da Semana:</label>
+            <div id="dias-semana">
+                <label><input type="checkbox" value="Segunda-feira"> Segunda-feira</label>
+                <label><input type="checkbox" value="Terça-feira"> Terça-feira</label>
+                <label><input type="checkbox" value="Quarta-feira"> Quarta-feira</label>
+                <label><input type="checkbox" value="Quinta-feira"> Quinta-feira</label>
+                <label><input type="checkbox" value="Sexta-feira"> Sexta-feira</label>
+                <label><input type="checkbox" value="Sábado"> Sábado</label>
+            </div>
+
+            <button type="submit">Adicionar Aluna</button>
+        </form>
+
+        <h2>Alunas Cadastradas</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Mensalidade (R$)</th>
+                    <th>Turma</th>
+                    <th>Dias da Semana</th>
+                    <th>Status de Pagamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="student-table">
+                <!-- Alunas adicionadas aqui -->
+            </tbody>
+        </table>
+
+        <nav>
+            <a href="index.html">Resumo</a> |
+            <a href="custos-fixos.html">Custos Fixos</a>
+            <a href="transaçoes.html">Realizar transações</a>
+        </nav>
+    </div>
+
+
+</body>
+</html>
